@@ -331,12 +331,14 @@ int main(int argc, char **argv)
     
     
     bool createDir = true;
-    bool saveIV = true;
+    bool saveIV = false;
     bool forceWrite = createDir;  // only enforce if creating dir is also allowed
-    
+    bool saveWorld = true;
+    saveSeparate = false;
+
     // in case one wants to view the initial world before planning, save it:
     graspitMgr->saveGraspItWorld(outputDirectory + "/startWorld.xml", createDir);
-    graspitMgr->saveInventorWorld(outputDirectory + "/startWorld.iv", createDir);
+//    graspitMgr->saveInventorWorld(outputDirectory + "/startWorld.iv", createDir);
 
     if (saveSeparate)
     {
@@ -344,14 +346,12 @@ int main(int argc, char **argv)
         graspitMgr->saveObjectAsInventor(outputDirectory + "/object.iv", useObjectName, createDir, forceWrite);
     }
 
-    int repeatPlanning = 1;
-    int keepMaxPlanningResults = 3;
-    bool finishWithAutograsp = false;
+    int repeatPlanning = 10;
+    int keepMaxPlanningResults = 10;
+    bool finishWithAutograsp = true;
     p->plan(maxPlanningSteps, repeatPlanning, keepMaxPlanningResults, finishWithAutograsp);
 
     PRINTMSG("Saving results as world files");
-
-    bool saveWorld = true;
 
     std::string resultsWorldDirectory = outputDirectory;
     std::string filenamePrefix = "world";

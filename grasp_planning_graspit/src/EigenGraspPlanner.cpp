@@ -1039,7 +1039,7 @@ void EigenGraspPlanner::plannerReset()
 
 void EigenGraspPlanner::plannerUpdate()
 {
-    PRINTMSG("=== EigenGraspPlanner update ===");
+//    PRINTMSG("=== EigenGraspPlanner update ===");
     updateResults();
 }
 
@@ -1061,10 +1061,10 @@ void EigenGraspPlanner::updateResults()
 
     int nStep = graspitEgPlanner->getCurrentStep();
     float runTime = graspitEgPlanner->getRunningTime();
-    PRINTMSG("Current Step: " << nStep);
+//    PRINTMSG("Current Step: " << nStep);
     // PRINTMSG("Current time: " << runTime);
 
-    printResult(0, false);
+//    printResult(0, false);
 }
 
 
