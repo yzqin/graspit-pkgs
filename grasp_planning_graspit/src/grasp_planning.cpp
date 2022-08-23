@@ -283,7 +283,7 @@ int main(int argc, char **argv)
     {
         PRINTMSG("Loading world");
         graspitMgr->loadWorld(worldFilename);
-        std::vector<std::string> robs = graspitMgr->getRobotNames();       
+        std::vector<std::string> robs = graspitMgr->getRobotNames();
         std::vector<std::string> objs = graspitMgr->getObjectNames(true);
         if (robs.empty())
         {
@@ -319,7 +319,7 @@ int main(int argc, char **argv)
         objectTransform.setIdentity();
         objectTransform.translate(objPos);
         // objectTransform.translate(Eigen::Vector3d(100,0,0));
-        std::string robotName(useRobotName); 
+        std::string robotName(useRobotName);
         std::string objectName(useObjectName);
         if ((graspitMgr->loadRobot(robotFilename, robotName, robotTransform) != 0) ||
                 (graspitMgr->loadObject(objectFilename, objectName, true, objectTransform)))
@@ -328,8 +328,8 @@ int main(int argc, char **argv)
             return 1;
         }
     }
-    
-    
+
+
     bool createDir = true;
     bool saveIV = false;
     bool forceWrite = createDir;  // only enforce if creating dir is also allowed
@@ -346,9 +346,9 @@ int main(int argc, char **argv)
         graspitMgr->saveObjectAsInventor(outputDirectory + "/object.iv", useObjectName, createDir, forceWrite);
     }
 
-    int repeatPlanning = 10;
-    int keepMaxPlanningResults = 10;
-    bool finishWithAutograsp = true;
+    int repeatPlanning = 5;
+    int keepMaxPlanningResults = 20;
+    bool finishWithAutograsp = false;
     p->plan(maxPlanningSteps, repeatPlanning, keepMaxPlanningResults, finishWithAutograsp);
 
     PRINTMSG("Saving results as world files");
