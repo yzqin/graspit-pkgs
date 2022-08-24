@@ -88,6 +88,7 @@ boost::program_options::options_description getOptions()
     ("rob", boost::program_options::value<std::string>(), "filename for the robot file -- ALTERNATIVE to parameter wld!")
     ("obj", boost::program_options::value<std::string>(), "filename for the object file -- ALTERNATIVE to parameter wld!")
     ("iter", boost::program_options::value<int>(), "Maximum number of iterations for the planning algorithm")
+    ("repeat", boost::program_options::value<int>(), "Number of repeat for the planning algorithm")
     ("obj-pos", boost::program_options::value<std::vector<float> >()->multitoken(), "Position of the object relative to the robot: Specify one x, y and z value.")
     ("save-separate", "if this flag is set, robot and object files will be saved separately in addition to the normal result.");
     return desc;
@@ -105,7 +106,7 @@ boost::program_options::variables_map loadParams(int argc, char ** argv)
 
 bool loadParams(int argc, char ** argv, std::string& worldFilename, std::string& robotFilename,
                 std::string& objectFilename, std::string& outputDirectory, bool& saveSeparate, Eigen::Vector3d& objPos,
-                int& maxIterations)
+                int& maxIterations, int& repeat)
 {
     saveSeparate = false;
     worldFilename.clear();
@@ -219,6 +220,12 @@ bool loadParams(int argc, char ** argv, std::string& worldFilename, std::string&
         }
     }
 
+    if (vm.count("iter"))
+    {
+        repeat = vm["repeat"].as<int>();
+        PRINTMSG("Number of repeat: " << repeat);
+    }
+
 
     if (vm.count("obj-pos"))
     {
@@ -255,8 +262,9 @@ int main(int argc, char **argv)
     bool saveSeparate;
     Eigen::Vector3d objPos;
     int maxPlanningSteps = 50000;
+    int repeat = 5;
 
-    if (!loadParams(argc, argv, worldFilename, robotFilename, objectFilename, outputDirectory, saveSeparate, objPos, maxPlanningSteps))
+    if (!loadParams(argc, argv, worldFilename, robotFilename, objectFilename, outputDirectory, saveSeparate, objPos, maxPlanningSteps, repeat))
     {
         PRINTERROR("Could not read arguments");
         return 1;
@@ -346,10 +354,9 @@ int main(int argc, char **argv)
         graspitMgr->saveObjectAsInventor(outputDirectory + "/object.iv", useObjectName, createDir, forceWrite);
     }
 
-    int repeatPlanning = 5;
     int keepMaxPlanningResults = 20;
     bool finishWithAutograsp = false;
-    p->plan(maxPlanningSteps, repeatPlanning, keepMaxPlanningResults, finishWithAutograsp);
+    p->plan(maxPlanningSteps, repeat, keepMaxPlanningResults, finishWithAutograsp);
 
     PRINTMSG("Saving results as world files");
 
